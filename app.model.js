@@ -1,9 +1,10 @@
 const db = require('./db/connection')
 
-exports.getAllTopicsInfo = () => {
-    return db.query("SELECT slug, description FROM topics")
+function getAllTopicsInfo() {
+    return db.query("SELECT * FROM topics")
      .then((result) => {
         return result.rows
      })
 }
 
+module.exports = getAllTopicsInfo
