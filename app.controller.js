@@ -1,10 +1,15 @@
-const getAllTopicsInfo = require('./app.model')
+const {getAllTopicsInfo, getAllEndpointsInfo} = require('./app.model')
 
 function getAllTopics(req, res) {
     getAllTopicsInfo().then((topics) => { 
-        console.log(topics)
         res.status(200).send( {topics} )
     })
 }
 
-module.exports = getAllTopics
+function getAllEndpoints(req, res) {
+    getAllEndpointsInfo().then((endPoints) => {
+        res.status(200).send({ endPoints })
+    })
+}
+
+module.exports = {getAllTopics, getAllEndpoints}
