@@ -9,4 +9,5 @@ if (!process.env.PGDATABASE) {
   throw new Error('PGDATABASE not set');
 }
 
-module.exports = new Pool();
+const pool = new Pool()
+module.exports = pool;
