@@ -1,4 +1,4 @@
-const {getAllTopicsInfo, getAllEndpointsInfo} = require('./app.model')
+const {getAllTopicsInfo, getAllEndpointsInfo, getArticleInfo} = require('./app.model')
 
 function getAllTopics(req, res) {
     getAllTopicsInfo().then((topics) => { 
@@ -12,4 +12,15 @@ function getAllEndpoints(req, res) {
     })
 }
 
-module.exports = {getAllTopics, getAllEndpoints}
+function getArticleById(req, res, next) {
+    const { article_id} = req.params;
+
+    getArticleInfo(article_id).then((article) => {
+        res.status(200).send({article})
+    }) .catch ((err) => {
+
+        next(err)
+})
+}
+
+module.exports = {getAllTopics, getAllEndpoints, getArticleById}
