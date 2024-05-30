@@ -16,9 +16,9 @@ describe("GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        const output = body.topics;
-        expect(output).toHaveLength(3);
-        output.forEach((topic) => {
+        const topics = body.topics;
+        expect(topics).toHaveLength(3);
+        topics.forEach((topic) => {
           expect(topic).toEqual(
             expect.objectContaining({
               description: expect.any(String),
@@ -62,25 +62,43 @@ describe("GET /api/articles/:article_id", () => {
   });
   test("responds with a 404 error code when passed a valid but non existent id", () => {
     return request(app)
-    .get("/api/articles/9000")
-    .expect(404)
-    .then(({body}) => {
-
-      
-      expect(body.msg).toBe('article id does not exist');
-
-    })
-  })
+      .get("/api/articles/9000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("article id does not exist");
+      });
+  });
   test("responds with a 400 error code when passed an invalid id", () => {
     return request(app)
-    .get("/api/articles/not-an-article")
-    .expect(400)
-    .then(({body}) => {
-
-      
-      expect(body.msg).toBe('Bad request');
-
-    })
-
-})
-})
+      .get("/api/articles/not-an-article")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+  describe("GET /api/articles", () => {
+    test("responds with a 200 status code and an array of all available article objects", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          const articles = body;
+          expect(articles).toHaveLength(13);
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number),
+              })
+            );
+          });
+        });
+    });
+  });
+});
