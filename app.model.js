@@ -30,9 +30,8 @@ function getArticleInfo(article_id) {
 
 function getAllArticlesInfo() {
   return db
-    .query(
-      "SELECT article_id, title, topic, author, created_at, article_img_url, votes FROM articles"
-    )
+    .query( `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.article_img_url, articles.votes, COUNT(comments.comment_id) as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY created_at DESC`
+  )
     .then((articles) => {
       if (articles.rows.length === 0) {
         return Promise.reject({
@@ -42,11 +41,13 @@ function getAllArticlesInfo() {
       }
       return articles.rows;
     });
-}
-
-module.exports = {
-  getAllTopicsInfo,
-  getAllEndpointsInfo,
-  getArticleInfo,
-  getAllArticlesInfo,
-};
+  }
+  
+  module.exports = {
+    getAllTopicsInfo,
+    getAllEndpointsInfo,
+    getArticleInfo,
+    getAllArticlesInfo,
+  };
+  
+  

@@ -76,29 +76,47 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request");
       });
   });
-  describe("GET /api/articles", () => {
-    test("responds with a 200 status code and an array of all available article objects", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body }) => {
-          const articles = body;
-          expect(articles).toHaveLength(13);
-          articles.forEach((article) => {
-            expect(article).toEqual(
-              expect.objectContaining({
-                article_id: expect.any(Number),
-                title: expect.any(String),
-                topic: expect.any(String),
-                author: expect.any(String),
-                created_at: expect.any(String),
-                votes: expect.any(Number),
-                article_img_url: expect.any(String),
-                votes: expect.any(Number),
-              })
-            );
-          });
+});
+describe("GET /api/articles", () => {
+  test("responds with a 200 status code and an array of all available article objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+          coerce: true,
         });
-    });
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("Should return with comment count of each article", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body;
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              comment_count: expect.any(String),
+            })
+          );
+        });
+      });
   });
 });
