@@ -120,3 +120,30 @@ describe("GET /api/articles", () => {
       });
   });
 });
+describe("GET /api/article/:article_id/comments", () => {
+  test("Should return with a 200 status code and an array of available comments for given article id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body;
+        console.log(comments)
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+          coerce: true,
+        });
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              body: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
