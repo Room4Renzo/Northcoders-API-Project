@@ -1,14 +1,15 @@
 {
   "name": "be-nc-news",
+  "main": "listen.js",
+    "scripts": {
   "version": "1.0.0",
-  "description": "bc-nc-news",
-  "main": "index.js",
-  "scripts": {
+  "description": "be-nc-news",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
-    "prepare": "husky install",
-    "start": "nodemon app.js"
+    "start-dev": "nodemon app.js",
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "repository": {
     "type": "git",

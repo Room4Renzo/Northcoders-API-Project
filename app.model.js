@@ -58,10 +58,20 @@ function getCommentInfo(article_id) {
     });
 }
 
+function newCommentInfo({article_id, username, body}){
+  console.log('hello from ')
+  return db.query(`INSERT INTO comments (article_id, username, body) VALUES ($1, $2, $3) RETURNING * `, [article_id, username, body])
+  .then((comment) => {
+    return comment.rows
+
+  })
+}
+
 module.exports = {
   getAllTopicsInfo,
   getAllEndpointsInfo,
   getArticleInfo,
   getAllArticlesInfo,
   getCommentInfo,
+  newCommentInfo
 };

@@ -127,7 +127,6 @@ describe("GET /api/article/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const comments = body;
-        console.log(comments)
         expect(comments).toBeSortedBy("created_at", {
           descending: true,
           coerce: true,
@@ -144,6 +143,28 @@ describe("GET /api/article/:article_id/comments", () => {
             })
           );
         });
+      });
+  });
+});
+describe("POST /api/articles/:article_id/comments", () => {
+  test("200 inserts a new comment to the db and sends the new comment back to the client", () => {
+    const newComment = {
+      username: "",
+      body: "",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(200)
+      .then(( body ) => {
+        const comment = body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            username: expect.any(String),
+            body: expect.any(String),
+          })
+        );
       });
   });
 });
