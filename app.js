@@ -34,6 +34,6 @@ app.use((err, req, res, next) => {
     res.status(404).send({msg: 'Could not find the page you were looking for'})
   })
 
-
+  
 
 module.exports = app
